@@ -1,158 +1,107 @@
-﻿# IntegradorIII
+﻿# Sistema de Gestión de Incidentes
 
- # Integrador III
-
-## Descripción
-
-Proyecto desarrollado para el curso Integrador III.
-
-El sistema consiste en una API REST desarrollada con Express.js y Firebase Firestore para la gestión de usuarios e incidentes. Esta API será consumida tanto por una aplicación web como por una aplicación móvil, compartiendo la misma base de datos.
+Sistema web desarrollado con React, Express y Firebase para la gestión de incidentes, evidencias, observaciones, bitácora y control de usuarios mediante autenticación JWT.
 
 ---
 
 # Tecnologías utilizadas
 
+## Backend
+
 - Node.js
-- Express.js
+- Express
 - Firebase Firestore
-- Firebase Admin SDK
-- Postman
-- Git
-- GitHub
+- Firebase Storage
+- JWT (JSON Web Token)
+- Multer
+
+## Frontend
+
+- React
+- Vite
+- React Router DOM
+- Axios
 
 ---
 
-# Requisitos
-
-Antes de ejecutar el proyecto es necesario instalar:
-
-## 1. Node.js
-
-Descargar la versión LTS desde:
-
-https://nodejs.org/
-
-Verificar la instalación:
+# Clonar el proyecto
 
 ```bash
-node -v
-npm -v
+git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
 ```
 
----
-
-## 2. Configurar PowerShell (solo Windows)
-
-Si aparece el error:
-
-```
-running scripts is disabled on this system
-```
-
-Abrir PowerShell como Administrador y ejecutar:
-
-```powershell
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-Aceptar con:
-
-```
-Y
-```
-
----
-
-## 3. Clonar el proyecto
+Entrar al proyecto
 
 ```bash
-git clone https://github.com/KennethCampos/IntegradorIII.git
-```
-
-Entrar a la carpeta:
-
-```bash
-cd IntegradorIII
+cd integrador
 ```
 
 ---
 
-## 4. Instalar dependencias
+# Instalación del Backend
+
+Entrar al proyecto principal
 
 ```bash
 npm install
 ```
 
-Este comando instalará automáticamente todos los paquetes definidos en `package.json`.
+Instalar dependencias utilizadas
+
+```bash
+npm install express
+npm install cors
+npm install firebase-admin
+npm install multer
+npm install jsonwebtoken
+npm install dotenv
+npm install nodemon --save-dev
+```
 
 ---
 
 # Configuración de Firebase
 
-Este proyecto utiliza Firebase Firestore mediante el SDK de administrador.
-
-Por seguridad, el archivo de credenciales **no se encuentra incluido en el repositorio**.
-
-Cada desarrollador debe descargar su propio archivo de credenciales desde Firebase.
-
-## Pasos
-
-Entrar a:
-
-Firebase Console
-
-Seleccionar el proyecto.
-
-Ir a:
+Crear la carpeta:
 
 ```
-Configuración del proyecto
+credentials/
 ```
 
-↓
-
-```
-Cuentas de servicio
-```
-
-↓
-
-```
-Generar nueva clave privada
-```
-
-Se descargará un archivo similar a:
+Dentro colocar el archivo:
 
 ```
 serviceAccount.json
 ```
 
-Colocarlo dentro de:
-
-```
-credentials/
-    serviceAccount.json
-```
-
-No modificar el nombre del archivo.
+Este archivo debe descargarse desde Firebase Console.
 
 ---
 
-# Ejecutar el proyecto
+# Variables de entorno
 
-Modo desarrollo:
+Crear un archivo:
+
+```
+.env
+```
+
+Con el siguiente contenido:
+
+```
+JWT_SECRET=TuClaveSecreta
+PORT=3000
+```
+
+---
+
+# Ejecutar Backend
 
 ```bash
 npm run dev
 ```
 
-Modo normal:
-
-```bash
-npm start
-```
-
-El servidor iniciará en:
+Servidor disponible en:
 
 ```
 http://localhost:3000
@@ -160,139 +109,150 @@ http://localhost:3000
 
 ---
 
-# Endpoints disponibles
+# Instalación del Frontend
+
+Entrar a la carpeta web
+
+```bash
+cd web
+```
+
+Instalar dependencias
+
+```bash
+npm install
+```
+
+Si fuera necesario instalar manualmente
+
+```bash
+npm install react-router-dom
+npm install axios
+```
+
+---
+
+# Ejecutar Frontend
+
+```bash
+npm run dev
+```
+
+Disponible en
+
+```
+http://localhost:5173
+```
+
+---
+
+# Funcionalidades
+
+- Inicio de sesión mediante JWT.
+- Gestión de usuarios.
+- Registro de incidentes.
+- Registro de accidentes.
+- Adjuntar evidencias.
+- Observaciones por responsables.
+- Cambio de estado de incidentes.
+- Bitácora de acciones.
+- Gestión de roles.
+- Autenticación mediante Token.
+
+---
+
+# Roles del sistema
+
+## Administrador
+
+- Gestionar usuarios.
+- Consultar bitácora.
+- Consultar incidentes.
+
+## Responsable
+
+- Consultar incidentes.
+- Agregar observaciones.
+- Cambiar estado.
+- Consultar evidencias.
+
+## Reportante
+
+- Registrar incidentes.
+- Consultar sus incidentes.
+- Consultar evidencias.
+
+---
+
+# API
+
+## Autenticación
+
+```
+POST /api/auth/login
+```
+
+---
 
 ## Usuarios
 
-### Obtener usuarios
-
-GET
-
 ```
-/api/usuarios
-```
-
-### Crear usuario
-
-POST
-
-```
-/api/usuarios
-```
-
-### Actualizar rol
-
-PUT
-
-```
-/api/usuarios/:id
+GET    /api/usuarios
+GET    /api/usuarios/:id
+POST   /api/usuarios
+PUT    /api/usuarios/:id
+DELETE /api/usuarios/:id
 ```
 
 ---
 
 ## Incidentes
 
-### Obtener todos
-
-GET
-
 ```
-/api/incidentes
-```
-
-### Crear incidente
-
-POST
-
-```
-/api/incidentes
-```
-
-### Buscar por reportante
-
-GET
-
-```
-/api/incidentes/reportante/:id
-```
-
-### Buscar por estado
-
-GET
-
-```
-/api/incidentes/estado/:estado
-```
-
-### Buscar por tipo
-
-GET
-
-```
-/api/incidentes/tipo/:tipo
+GET    /api/incidentes
+GET    /api/incidentes/:id
+POST   /api/incidentes
+PUT    /api/incidentes/:id
+DELETE /api/incidentes/:id
 ```
 
 ---
 
-# Estructura del proyecto
+## Observaciones
 
 ```
-src/
-│
-├── controllers/
-├── routes/
-├── services/
-├── dtos/
-├── firebase/
-│
-├── app.js
-│
-credentials/
-│
-└── serviceAccount.json
+GET  /api/incidentes/:id/observaciones
+POST /api/incidentes/:id/observaciones
 ```
 
 ---
 
-# Arquitectura
+## Estado
 
-La aplicación sigue una arquitectura por capas:
-
-Cliente
-
-↓
-
-Routes
-
-↓
-
-Controllers
-
-↓
-
-DTOs
-
-↓
-
-Services
-
-↓
-
-Firebase Firestore
+```
+PATCH /api/incidentes/:id/estado
+```
 
 ---
 
-# Notas importantes
+## Evidencias
 
-- No subir el archivo `serviceAccount.json` al repositorio.
-- Ejecutar `npm install` después de clonar el proyecto.
-- Verificar que Node.js esté instalado correctamente.
-- El proyecto utiliza Firebase Firestore como base de datos.
+```
+POST /api/incidentes/:id/evidencias
+```
 
 ---
 
-# Autores
+## Bitácora
 
+```
+GET /api/bitacora
+```
 
+---
+
+# Autor
+
+Kenneth Josué Campos Soto
 
 Universidad Técnica Nacional
