@@ -46,6 +46,35 @@ const crearIncidente = async (req, res) => {
 
 };
 
+// Obtener un incidente por ID
+const obtenerIncidentePorId = async (req, res) => {
+
+    try {
+
+        const incidente = await incidenteService.obtenerIncidentePorId(
+            req.params.id
+        );
+
+        if (!incidente) {
+
+            return res.status(404).json({
+                mensaje: "Incidente no encontrado."
+            });
+
+        }
+
+        res.status(200).json(incidente);
+
+    } catch (error) {
+
+        res.status(500).json({
+            mensaje: error.message
+        });
+
+    }
+
+};
+
 
 //busqueda de incidentes del repotante
 const obtenerIncidentesPorReportante = async (req, res) => {
@@ -116,16 +145,70 @@ const obtenerIncidentesPorTipo = async (req, res) => {
 
 };
 
+//eliminar usuario
+const eliminarIncidente = async (req, res) => {
+    try {
+        await incidenteService.eliminarIncidente(req.params.id);
+
+        res.status(200).json({
+            mensaje: "Incidente eliminado correctamente."
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            mensaje: error.message
+        });
+    }
+};
+
+const actualizarIncidente = async (req, res) => {
+
+    try {
+
+        const incidente = await incidenteService.actualizarIncidente(
+
+            req.params.id,
+
+            req.body
+
+        );
+
+        res.status(200).json({
+
+            mensaje: "Incidente actualizado correctamente.",
+
+            incidente
+
+        });
+
+    } catch (error) {
+
+        res.status(400).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
+
 module.exports = {
 
     obtenerIncidentes,
 
     crearIncidente,
 
+    obtenerIncidentePorId,
+
     obtenerIncidentesPorReportante,
 
     obtenerIncidentesPorEstado,
 
-    obtenerIncidentesPorTipo
+    obtenerIncidentesPorTipo,
+
+    eliminarIncidente,
+
+    actualizarIncidente
 
 };

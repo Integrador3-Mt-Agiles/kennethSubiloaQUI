@@ -31,6 +31,9 @@ const obtenerUsuarios = async () => {
 
 };
 
+
+
+
 // Obtener por ID
 const obtenerUsuarioPorId = async (id) => {
 
@@ -158,6 +161,40 @@ const eliminarUsuario = async (id) => {
 
 };
 
+// Obtener usuarios por rol
+const obtenerUsuariosPorRol = async (rol) => {
+
+    try {
+
+        const snapshot = await db
+            .collection("usuarios")
+            .where("rol", "==", rol)
+            .get();
+
+        const usuarios = [];
+
+        snapshot.forEach((doc) => {
+
+            usuarios.push({
+
+                id: doc.id,
+
+                ...doc.data()
+
+            });
+
+        });
+
+        return usuarios;
+
+    } catch (error) {
+
+        throw error;
+
+    }
+
+};
+
 module.exports = {
 
     obtenerUsuarios,
@@ -168,6 +205,8 @@ module.exports = {
 
     actualizarUsuario,
 
-    eliminarUsuario
+    eliminarUsuario,
+
+    obtenerUsuariosPorRol
 
 };

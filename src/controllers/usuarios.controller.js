@@ -127,6 +127,29 @@ const eliminarUsuario = async (req, res) => {
 
 };
 
+
+const obtenerUsuariosPorRol = async (req, res) => {
+
+    try {
+
+        const usuarios = await usuarioService.obtenerUsuariosPorRol(
+            req.params.rol
+        );
+
+        res.status(200).json(usuarios);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
+
 module.exports = {
 
     obtenerUsuarios,
@@ -137,6 +160,8 @@ module.exports = {
 
     actualizarUsuario,
 
-    eliminarUsuario
+    eliminarUsuario,
+
+    obtenerUsuariosPorRol 
 
 };

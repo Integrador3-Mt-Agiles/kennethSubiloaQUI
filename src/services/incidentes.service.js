@@ -2,23 +2,63 @@ const { db } = require("../firebase/firebase.config");
 
 // Obtener todos los incidentes
 const obtenerIncidentes = async () => {
+
     try {
-        const snapshot = await db.collection("incidentes").get();
+
+        const snapshot = await db
+            .collection("incidentes")
+            .get();
 
         const incidentes = [];
 
-        snapshot.forEach((doc) => {
-            incidentes.push({
+        for (const doc of snapshot.docs) {
+
+            const incidente = {
+
                 id: doc.id,
+
                 ...doc.data()
+
+            };
+
+            let reportanteNombre = "No encontrado";
+
+            if (incidente.reportanteId) {
+
+                const usuarioDoc = await db
+                    .collection("usuarios")
+                    .doc(incidente.reportanteId)
+                    .get();
+
+                if (usuarioDoc.exists) {
+
+                    reportanteNombre = usuarioDoc.data().nombre;
+
+                }
+
+            }
+
+            incidentes.push({
+
+                ...incidente,
+
+                reportanteNombre
+
             });
-        });
+
+        }
 
         return incidentes;
 
     } catch (error) {
-        throw new Error("Error al obtener los incidentes: " + error.message);
+
+        throw new Error(
+            "Error al obtener los incidentes: " +
+            error.message
+        );
+
     }
+
 };
 
 // Crear un incidente
@@ -67,19 +107,49 @@ const obtenerIncidentePorId = async (id) => {
 
     try {
 
-        const doc = await db.collection("incidentes").doc(id).get();
+        const doc = await db
+            .collection("incidentes")
+            .doc(id)
+            .get();
 
         if (!doc.exists) {
+
             return null;
+
+        }
+
+        const incidente = doc.data();
+
+        let reportanteNombre = "Usuario desconocido";
+
+        const usuarioDoc = await db
+            .collection("usuarios")
+            .doc(incidente.reportanteId)
+            .get();
+
+        if (usuarioDoc.exists) {
+
+            reportanteNombre = usuarioDoc.data().nombre;
+
         }
 
         return {
+
             id: doc.id,
-            ...doc.data()
+
+            ...incidente,
+
+            reportanteNombre
+
         };
 
     } catch (error) {
-        throw new Error("Error al obtener el incidente: " + error.message);
+
+        throw new Error(
+            "Error al obtener el incidente: " +
+            error.message
+        );
+
     }
 
 };
@@ -89,15 +159,26 @@ const actualizarIncidente = async (id, datos) => {
 
     try {
 
-        await db.collection("incidentes").doc(id).update(datos);
+        await db
+            .collection("incidentes")
+            .doc(id)
+            .update(datos);
 
         return {
+
             id,
+
             ...datos
+
         };
 
     } catch (error) {
-        throw new Error("Error al actualizar el incidente: " + error.message);
+
+        throw new Error(
+            "Error al actualizar el incidente: " +
+            error.message
+        );
+
     }
 
 };
@@ -221,6 +302,8 @@ const obtenerIncidentesPorTipo = async (tipo) => {
     }
 
 };
+
+
 
 module.exports = {
     obtenerIncidentes,
