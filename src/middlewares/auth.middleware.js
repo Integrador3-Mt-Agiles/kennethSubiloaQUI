@@ -1,67 +1,36 @@
 const jwt = require("jsonwebtoken");
-
-const {
-
-    SECRET_KEY
-
-} = require("../utils/jwt");
+const { SECRET_KEY } = require("../utils/jwt");
 
 const verificarToken = (req, res, next) => {
-
-    console.log("Authorization:", req.headers.authorization);
-
     try {
-
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
-
             return res.status(401).json({
-
-                mensaje: "Token no proporcionado."
-
+                mensaje: "Debe iniciar sesión para continuar."
             });
-
         }
 
-        const token = authHeader.split(" ")[1];
+        const [tipo, token] = authHeader.trim().split(/\s+/);
 
-        if (!token) {
-
+        if (tipo !== "Bearer" || !token) {
             return res.status(401).json({
-
-                mensaje: "Token inválido."
-
+                mensaje: "La sesión proporcionada no es válida."
             });
-
         }
 
-        const usuario = jwt.verify(
-
-            token,
-
-            SECRET_KEY
-
-        );
-
-        req.usuario = usuario;
-
-        next();
-
-    } catch (error) {
-
-        return res.status(401).json({
-
-            mensaje: "Token inválido o expirado."
-
+        req.usuario = jwt.verify(token, SECRET_KEY, {
+            algorithms: ["HS256"],
+            issuer: "sistema-incidentes",
+            audience: "sistema-incidentes-web"
         });
 
+        next();
+    } catch (error) {
+        return res.status(401).json({
+            mensaje: "Su sesión no es válida o ha expirado. Inicie sesión nuevamente."
+        });
     }
-
 };
 
-module.exports = {
-
-    verificarToken
-
-};
+module.exports = { verificarToken };

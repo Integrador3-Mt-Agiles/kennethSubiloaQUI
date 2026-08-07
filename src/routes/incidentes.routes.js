@@ -1,41 +1,50 @@
 const express = require("express");
 const router = express.Router();
 
-
 const {
-
     obtenerIncidentes,
-
     crearIncidente,
-
     obtenerIncidentePorId,
-
     actualizarIncidente,
-
     obtenerIncidentesPorReportante,
-
     obtenerIncidentesPorEstado,
-
     obtenerIncidentesPorTipo,
-    
     eliminarIncidente
-
 } = require("../controllers/incidentes.controller");
 
-router.get("/", obtenerIncidentes);
+const { verificarToken } = require("../middlewares/auth.middleware");
+const { verificarRol } = require("../middlewares/rol.middleware");
+const {
+    verificarAccesoIncidente,
+    verificarConsultaReportante
+} = require("../middlewares/acceso.middleware");
 
-router.post("/", crearIncidente);
+router.use(verificarToken);
 
-router.get("/:id", obtenerIncidentePorId);
+router.get("/", verificarRol("Administrador", "Responsable"), obtenerIncidentes);
+router.post("/", verificarRol("Reportante"), crearIncidente);
 
-router.put("/:id", actualizarIncidente);
+router.get(
+    "/reportante/:id",
+    verificarRol("Administrador", "Responsable", "Reportante"),
+    verificarConsultaReportante,
+    obtenerIncidentesPorReportante
+);
 
-router.get("/reportante/:id", obtenerIncidentesPorReportante);
+router.get(
+    "/estado/:estado",
+    verificarRol("Administrador", "Responsable"),
+    obtenerIncidentesPorEstado
+);
 
-router.get("/estado/:estado", obtenerIncidentesPorEstado);
+router.get(
+    "/tipo/:tipo",
+    verificarRol("Administrador", "Responsable"),
+    obtenerIncidentesPorTipo
+);
 
-router.get("/tipo/:tipo", obtenerIncidentesPorTipo);
-
-router.delete("/:id", eliminarIncidente);
+router.get("/:id", verificarAccesoIncidente, obtenerIncidentePorId);
+router.put("/:id", verificarRol("Administrador"), actualizarIncidente);
+router.delete("/:id", verificarRol("Administrador"), eliminarIncidente);
 
 module.exports = router;

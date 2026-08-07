@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import {
     obtenerIncidentes,
+    obtenerIncidentesPorReportante,
     eliminarIncidente
 } from "../services/incidente.service";
 
@@ -16,6 +17,8 @@ import Modal from "../components/Modal";
 import FormularioIncidente from "../components/FormularioIncidente";
 
 function Incidentes() {
+
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
 
     const [incidentes, setIncidentes] = useState([]);
 
@@ -35,13 +38,17 @@ function Incidentes() {
 
         try {
 
-            const data = await obtenerIncidentes();
+            const data = usuario?.rol === "Reportante"
+                ? await obtenerIncidentesPorReportante(usuario.id)
+                : await obtenerIncidentes();
 
             setIncidentes(data);
 
         } catch (error) {
 
             console.error(error);
+
+            alert(error.response?.data?.mensaje || "No fue posible cargar los incidentes.");
 
         }
 
@@ -53,7 +60,7 @@ function Incidentes() {
 
             <h1>Incidentes</h1>
 
-            <button
+            {usuario?.rol === "Reportante" && <button
 
                 onClick={() => {
 
@@ -67,7 +74,7 @@ function Incidentes() {
 
                 Nuevo Incidente
 
-            </button>
+            </button>}
 
             <br />
 
@@ -83,15 +90,15 @@ function Incidentes() {
 
                 }}
 
-                onEditar={(incidente) => {
+                onEditar={usuario?.rol === "Administrador" ? (incidente) => {
 
                     setIncidenteSeleccionado(incidente);
 
                     setMostrarModal(true);
 
-                }}
+                } : null}
 
-                onEliminar={async (incidente) => {
+                onEliminar={usuario?.rol === "Administrador" ? async (incidente) => {
 
                     const confirmar = window.confirm(
 
@@ -123,7 +130,7 @@ function Incidentes() {
 
                     }
 
-                }}
+                } : null}
 
             />
 

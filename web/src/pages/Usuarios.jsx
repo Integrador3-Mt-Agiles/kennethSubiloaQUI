@@ -37,6 +37,8 @@ function Usuarios() {
 
             console.error(error);
 
+            alert(error.response?.data?.mensaje || "No fue posible cargar los usuarios.");
+
         }
 
     };

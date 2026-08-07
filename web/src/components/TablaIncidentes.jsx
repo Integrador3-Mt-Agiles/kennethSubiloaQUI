@@ -60,7 +60,7 @@ function TablaIncidentes({
 
                             <td>
 
-                                <button
+                                {onEditar && <button
 
                                     onClick={() =>
 
@@ -72,11 +72,11 @@ function TablaIncidentes({
 
                                     Editar
 
-                                </button>
+                                </button>}
 
                                 {" "}
 
-                                <button
+                                {onEliminar && <button
 
                                     onClick={() =>
 
@@ -88,7 +88,7 @@ function TablaIncidentes({
 
                                     Eliminar
 
-                                </button>
+                                </button>}
                                 
                                 {" "}
 

@@ -1,5 +1,10 @@
 const { db } = require("../firebase/firebase.config");
 
+const ocultarPassword = (usuario) => {
+    const { password, ...usuarioSeguro } = usuario;
+    return usuarioSeguro;
+};
+
 // Obtener todos
 const obtenerUsuarios = async () => {
 
@@ -15,7 +20,7 @@ const obtenerUsuarios = async () => {
 
                 id: doc.id,
 
-                ...doc.data()
+                ...ocultarPassword(doc.data())
 
             });
 
@@ -51,7 +56,7 @@ const obtenerUsuarioPorId = async (id) => {
 
             id: doc.id,
 
-            ...doc.data()
+            ...ocultarPassword(doc.data())
 
         };
 
@@ -85,7 +90,7 @@ const crearUsuario = async (usuario) => {
 
             id: docRef.id,
 
-            ...usuario
+            ...ocultarPassword(usuario)
 
         };
 
@@ -118,7 +123,7 @@ const actualizarUsuario = async (id, datos) => {
 
             id,
 
-            ...datos
+            ...ocultarPassword(datos)
 
         };
 
@@ -179,7 +184,7 @@ const obtenerUsuariosPorRol = async (rol) => {
 
                 id: doc.id,
 
-                ...doc.data()
+                ...ocultarPassword(doc.data())
 
             });
 

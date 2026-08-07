@@ -1,6 +1,6 @@
 const usuarioService = require("../services/usuarios.service");
 
-const { crearUsuarioDTO } = require("../dtos/usuario.dto");
+const { crearUsuarioDTO, actualizarUsuarioDTO } = require("../dtos/usuario.dto");
 
 // GET
 const obtenerUsuarios = async (req, res) => {
@@ -82,7 +82,7 @@ const actualizarUsuario = async (req, res) => {
 
             req.params.id,
 
-            req.body
+            actualizarUsuarioDTO(req.body)
 
         );
 

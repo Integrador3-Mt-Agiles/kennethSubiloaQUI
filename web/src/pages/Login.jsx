@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import MainLayout from "../layouts/MainLayout";
 import { login } from "../services/auth.service";
 
 function Login() {
@@ -35,7 +34,7 @@ function Login() {
 
             alert("Bienvenido.");
 
-            navigate("/");
+            navigate("/dashboard");
 
         } catch (error) {
 
@@ -52,7 +51,7 @@ function Login() {
 
     return (
 
-        <MainLayout>
+        <main style={{ maxWidth: "420px", margin: "60px auto", padding: "24px" }}>
 
             <h1>Iniciar Sesión</h1>
 
@@ -106,7 +105,7 @@ function Login() {
 
             </form>
 
-        </MainLayout>
+        </main>
 
     );
 

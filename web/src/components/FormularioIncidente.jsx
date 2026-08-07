@@ -25,6 +25,8 @@ function FormularioIncidente({
 
 }) {
 
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+
     const [titulo, setTitulo] = useState("");
     const [descripcion, setDescripcion] = useState("");
     const [tipo, setTipo] = useState("Incidente");
@@ -52,7 +54,7 @@ function FormularioIncidente({
             setTipo("Incidente");
             setUbicacion("");
             setFechaIncidente("");
-            setReportanteId("");
+            setReportanteId(usuario?.rol === "Reportante" ? usuario.id : "");
 
         }
 
@@ -60,7 +62,9 @@ function FormularioIncidente({
 
     useEffect(() => {
 
-        cargarReportantes();
+        if (usuario?.rol === "Administrador") {
+            cargarReportantes();
+        }
 
     }, []);
 
@@ -249,7 +253,7 @@ function FormularioIncidente({
 
             <br />
 
-            <div>
+            {usuario?.rol === "Administrador" && <div>
 
                 <label>Reportante</label>
 
@@ -293,7 +297,7 @@ function FormularioIncidente({
 
                 </select>
 
-            </div>
+            </div>}
             
             <div>
 

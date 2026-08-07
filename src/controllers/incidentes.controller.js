@@ -1,6 +1,6 @@
 const incidenteService = require("../services/incidentes.service");
 
-const { crearIncidenteDTO } = require("../dtos/incidente.dto");
+const { crearIncidenteDTO, actualizarIncidenteDTO } = require("../dtos/incidente.dto");
 
 
 // Obtener todos los incidentes
@@ -27,7 +27,10 @@ const crearIncidente = async (req, res) => {
 
     try {
 
-        const incidenteDTO = crearIncidenteDTO(req.body);
+        const incidenteDTO = crearIncidenteDTO({
+            ...req.body,
+            reportanteId: req.usuario.id
+        });
 
         const incidenteCreado = await incidenteService.crearIncidente(incidenteDTO);
 
@@ -38,7 +41,7 @@ const crearIncidente = async (req, res) => {
 
     } catch (error) {
 
-        res.status(500).json({
+        res.status(400).json({
             mensaje: error.message
         });
 
@@ -169,7 +172,7 @@ const actualizarIncidente = async (req, res) => {
 
             req.params.id,
 
-            req.body
+            actualizarIncidenteDTO(req.body)
 
         );
 

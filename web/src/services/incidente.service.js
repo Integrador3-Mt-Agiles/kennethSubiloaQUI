@@ -49,3 +49,8 @@ export const eliminarIncidente = async (id) => {
     return response.data;
 
 };
+
+export const obtenerIncidentesPorReportante = async (reportanteId) => {
+    const response = await api.get(`/incidentes/reportante/${reportanteId}`);
+    return response.data;
+};

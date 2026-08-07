@@ -16,6 +16,8 @@ import FormularioEstado from "../components/FormularioEstado";
 
 function DetalleIncidente() {
 
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+
     const { id } = useParams();
 
     const [incidente, setIncidente] = useState(null);
@@ -42,6 +44,8 @@ function DetalleIncidente() {
 
             console.error(error);
 
+            alert(error.response?.data?.mensaje || "No fue posible cargar el incidente.");
+
         }
 
     };
@@ -61,6 +65,8 @@ function DetalleIncidente() {
     } catch (error) {
 
         console.error(error);
+
+        alert(error.response?.data?.mensaje || "No fue posible cargar las observaciones.");
 
     }
 
@@ -202,8 +208,6 @@ function DetalleIncidente() {
 
             }
 
-            <p>No hay evidencias.</p>
-
             <hr />
 
             <h2>Observaciones</h2>
@@ -216,7 +220,7 @@ function DetalleIncidente() {
 
                 <hr />
 
-                <FormularioObservacion
+                {usuario?.rol === "Responsable" && <FormularioObservacion
 
                     incidenteId={id}
 
@@ -228,14 +232,14 @@ function DetalleIncidente() {
 
                     }}
 
-                />
+                />}
 
             <hr />
 
             
 
             
-            <div style={{ border: "1px solid red", padding: "10px" }}>
+            {usuario?.rol === "Responsable" && <div style={{ border: "1px solid red", padding: "10px" }}>
 
                 <FormularioEstado
                     incidente={incidente}
@@ -244,7 +248,7 @@ function DetalleIncidente() {
                     }}
                 />
 
-            </div>
+            </div>}
 
             
 

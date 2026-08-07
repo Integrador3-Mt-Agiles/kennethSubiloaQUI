@@ -44,6 +44,10 @@ const login = async (
 
     };
 
+    if (usuario.activo === false) {
+        throw new Error("Su usuario se encuentra inactivo. Contacte al administrador.");
+    }
+
     if (usuario.password !== password) {
 
         throw new Error(

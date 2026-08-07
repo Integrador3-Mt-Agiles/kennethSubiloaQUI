@@ -27,7 +27,7 @@ Sistema web desarrollado con React, Express y Firebase para la gestión de incid
 # Clonar el proyecto
 
 ```bash
-git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
+git clone https://github.com/Integrador3-Mt-Agiles/kennethSubiloaQUI.git
 ```
 
 Entrar al proyecto
@@ -184,70 +184,89 @@ http://localhost:5173
 
 ---
 
-# API
+# API y seguridad
+
+La API utiliza autenticación JWT. Excepto el login, las solicitudes deben incluir el token en el encabezado:
+
+```http
+Authorization: Bearer <token>
+```
+
+Los endpoints responden:
+
+- `401 Unauthorized`: no se proporcionó un token válido o la sesión expiró.
+- `403 Forbidden`: el usuario está autenticado, pero su rol o propiedad del recurso no le permite ejecutar la operación.
+- `404 Not Found`: el recurso o endpoint solicitado no existe.
+
+La respuesta contiene un mensaje legible para mostrar en el frontend:
+
+```json
+{
+  "mensaje": "No tiene permisos para realizar esta acción."
+}
+```
 
 ## Autenticación
 
-```
-POST /api/auth/login
-```
-
----
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| `POST` | `/api/auth/login` | Público | Valida las credenciales y devuelve el JWT y el perfil del usuario. |
 
 ## Usuarios
 
-```
-GET    /api/usuarios
-GET    /api/usuarios/:id
-POST   /api/usuarios
-PUT    /api/usuarios/:id
-DELETE /api/usuarios/:id
-```
+Todos los endpoints de usuarios requieren el rol `Administrador`.
 
----
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `GET` | `/api/usuarios` | Lista usuarios sin devolver contraseñas. |
+| `GET` | `/api/usuarios/rol/:rol` | Lista usuarios de un rol determinado. |
+| `GET` | `/api/usuarios/:id` | Consulta un usuario. |
+| `POST` | `/api/usuarios` | Crea un usuario. |
+| `PUT` | `/api/usuarios/:id` | Actualiza los campos permitidos de un usuario. |
+| `DELETE` | `/api/usuarios/:id` | Elimina un usuario. |
 
 ## Incidentes
 
-```
-GET    /api/incidentes
-GET    /api/incidentes/:id
-POST   /api/incidentes
-PUT    /api/incidentes/:id
-DELETE /api/incidentes/:id
-```
+| Método | Endpoint | Roles permitidos | Descripción |
+|---|---|---|---|
+| `GET` | `/api/incidentes` | Administrador, Responsable | Lista todos los incidentes. |
+| `POST` | `/api/incidentes` | Reportante | Crea un incidente asociado al usuario del JWT. |
+| `GET` | `/api/incidentes/reportante/:id` | Administrador, Responsable, Reportante | Lista incidentes de un reportante; un Reportante solo puede consultar su propio ID. |
+| `GET` | `/api/incidentes/estado/:estado` | Administrador, Responsable | Filtra incidentes por estado. |
+| `GET` | `/api/incidentes/tipo/:tipo` | Administrador, Responsable | Filtra incidentes por tipo. |
+| `GET` | `/api/incidentes/:id` | Administrador, Responsable, Reportante propietario | Consulta el detalle de un incidente permitido. |
+| `PUT` | `/api/incidentes/:id` | Administrador | Actualiza los campos generales permitidos. |
+| `DELETE` | `/api/incidentes/:id` | Administrador | Elimina un incidente. |
 
----
+## Observaciones y estado
 
-## Observaciones
-
-```
-GET  /api/incidentes/:id/observaciones
-POST /api/incidentes/:id/observaciones
-```
-
----
-
-## Estado
-
-```
-PATCH /api/incidentes/:id/estado
-```
-
----
+| Método | Endpoint | Roles permitidos | Descripción |
+|---|---|---|---|
+| `GET` | `/api/incidentes/:id/observaciones` | Usuario con acceso al incidente | Lista las observaciones. |
+| `POST` | `/api/incidentes/:id/observaciones` | Responsable | Agrega una observación. |
+| `PATCH` | `/api/incidentes/:id/estado` | Responsable | Cambia el estado según la transición permitida. |
 
 ## Evidencias
 
-```
-POST /api/incidentes/:id/evidencias
-```
-
----
+| Método | Endpoint | Roles permitidos | Descripción |
+|---|---|---|---|
+| `POST` | `/api/incidentes/:id/evidencias` | Usuario con acceso al incidente | Adjunta una imagen JPG, PNG o WEBP de hasta 5 MB. |
 
 ## Bitácora
 
+| Método | Endpoint | Roles permitidos | Descripción |
+|---|---|---|---|
+| `GET` | `/api/bitacora` | Administrador | Consulta la bitácora de acciones. |
+
+## Pruebas de seguridad
+
+Ejecutar desde la raíz:
+
+```bash
+npm test
 ```
-GET /api/bitacora
-```
+
+Las pruebas comprueban respuestas `401` sin token o con token inválido y respuestas `403` cuando un Reportante intenta ejecutar operaciones administrativas.
 
 ---
 

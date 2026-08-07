@@ -6,11 +6,32 @@ const subirEvidencia = async (incidenteId, archivo) => {
         throw new Error("Debe seleccionar una imagen.");
     }
 
-    const nombreArchivo =
-        `${Date.now()}_${archivo.originalname}`;
+    const extensionPorMime = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp"
+    };
+
+    const extension = extensionPorMime[archivo.mimetype];
+
+    if (!extension) {
+        throw new Error("El tipo de imagen no está permitido.");
+    }
+
+    const incidenteRef = db
+        .collection("incidentes")
+        .doc(incidenteId);
+
+    const incidenteDoc = await incidenteRef.get();
+
+    if (!incidenteDoc.exists) {
+        throw new Error("El incidente no existe.");
+    }
+
+    const nombreArchivo = `${incidenteId}_${Date.now()}.${extension}`;
 
     const file = bucket.file(
-        `evidencias/${nombreArchivo}`
+        `evidencias/${incidenteId}/${nombreArchivo}`
     );
 
     await file.save(archivo.buffer, {
@@ -22,16 +43,6 @@ const subirEvidencia = async (incidenteId, archivo) => {
     await file.makePublic();
 
     const url = file.publicUrl();
-
-    const incidenteRef = db
-        .collection("incidentes")
-        .doc(incidenteId);
-
-    const incidenteDoc = await incidenteRef.get();
-
-    if (!incidenteDoc.exists) {
-        throw new Error("El incidente no existe.");
-    }
 
     const incidente = incidenteDoc.data();
 

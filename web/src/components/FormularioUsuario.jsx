@@ -24,7 +24,7 @@ function FormularioUsuario({
 
             setNombre(usuario.nombre);
             setCorreo(usuario.correo);
-            setPassword(usuario.password);
+            setPassword("");
             setRol(usuario.rol);
 
         } else {
@@ -53,7 +53,7 @@ function FormularioUsuario({
                     {
                         nombre,
                         correo,
-                        password,
+                        ...(password ? { password } : {}),
                         rol
                     }
 
