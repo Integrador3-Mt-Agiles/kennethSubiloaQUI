@@ -48,7 +48,7 @@ function Incidentes() {
 
             console.error(error);
 
-            alert(error.response?.data?.mensaje || "No fue posible cargar los incidentes.");
+            alert(error.response?.data?.mensaje || "No fue posible cargar los Eventos.");
 
         }
 
@@ -58,9 +58,8 @@ function Incidentes() {
 
         <MainLayout>
 
-            <h1>Incidentes</h1>
-
-            {usuario?.rol === "Reportante" && <button
+            <div className="page-header"><div><p className="eyebrow">Gestión de eventos</p><h1>Eventos</h1></div>
+            {usuario?.rol === "Reportante" && <button className="button button-primary"
 
                 onClick={() => {
 
@@ -72,13 +71,9 @@ function Incidentes() {
 
             >
 
-                Nuevo Incidente
+                 Nuevo Evento
 
-            </button>}
-
-            <br />
-
-            <br />
+            </button>}</div>
 
             <TablaIncidentes
 
@@ -102,7 +97,7 @@ function Incidentes() {
 
                     const confirmar = window.confirm(
 
-                        `¿Desea eliminar el incidente "${incidente.titulo}"?`
+                        `¿Desea eliminar el Evento "${incidente.titulo}"?`
 
                     );
 
@@ -112,7 +107,7 @@ function Incidentes() {
 
                         await eliminarIncidente(incidente.id);
 
-                        alert("Incidente eliminado correctamente.");
+                        alert("Evento eliminado correctamente.");
 
                         cargarIncidentes();
 
@@ -142,9 +137,9 @@ function Incidentes() {
 
                     incidenteSeleccionado
 
-                        ? "Editar Incidente"
+                        ? "Editar Evento"
 
-                        : "Nuevo Incidente"
+                        : "Nuevo Evento"
 
                 }
 

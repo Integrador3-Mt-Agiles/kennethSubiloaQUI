@@ -44,7 +44,7 @@ function DetalleIncidente() {
 
             console.error(error);
 
-            alert(error.response?.data?.mensaje || "No fue posible cargar el incidente.");
+            alert(error.response?.data?.mensaje || "No fue posible cargar el Evento.");
 
         }
 
@@ -54,7 +54,7 @@ function DetalleIncidente() {
 
     try {
 
-        console.log("ID del incidente:", id);
+        console.log("ID del Evento:", id);
 
         const data = await obtenerObservaciones(id);
 
@@ -90,7 +90,7 @@ function DetalleIncidente() {
 
         <MainLayout>
 
-            <h1>Detalle del Incidente</h1>
+            <h1>Detalle del Evento</h1>
 
             <hr />
 

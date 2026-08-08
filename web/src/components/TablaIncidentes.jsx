@@ -12,15 +12,7 @@ function TablaIncidentes({
 
     return (
 
-        <table
-
-            border="1"
-
-            width="100%"
-
-            cellPadding="10"
-
-        >
+        <div className="card table-card"><table>
 
             <thead>
 
@@ -46,7 +38,7 @@ function TablaIncidentes({
 
                 {
 
-                    incidentes.map((incidente) => (
+                    incidentes.length === 0 ? <tr><td className="empty-state" colSpan="5">No hay Eventos registrados.</td></tr> : incidentes.map((incidente) => (
 
                         <tr key={incidente.id}>
 
@@ -58,9 +50,9 @@ function TablaIncidentes({
 
                             <td>{incidente.reportanteNombre}</td>
 
-                            <td>
+                            <td><div className="action-group">
 
-                                {onEditar && <button
+                                {onEditar && <button className="button button-secondary button-small"
 
                                     onClick={() =>
 
@@ -76,7 +68,7 @@ function TablaIncidentes({
 
                                 {" "}
 
-                                {onEliminar && <button
+                                {onEliminar && <button className="button button-danger button-small"
 
                                     onClick={() =>
 
@@ -92,7 +84,7 @@ function TablaIncidentes({
                                 
                                 {" "}
 
-                                <button
+                                <button className="button button-primary button-small"
 
                                     onClick={() => onVer(incidente)}
 
@@ -102,8 +94,7 @@ function TablaIncidentes({
 
                                 </button>
 
-                                {" "}
-
+                                {" "}</div>
                             </td>
 
                         </tr>
@@ -114,7 +105,7 @@ function TablaIncidentes({
 
             </tbody>
 
-        </table>
+        </table></div>
 
     );
 

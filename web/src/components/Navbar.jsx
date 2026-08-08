@@ -1,21 +1,4 @@
 function Navbar() {
-
-    return (
-
-        <header
-            style={{
-                backgroundColor: "#1976d2",
-                color: "white",
-                padding: "15px",
-                fontSize: "22px",
-                fontWeight: "bold"
-            }}
-        >
-            Sistema de Gestión de Incidentes
-        </header>
-
-    );
-
+    return <header className="app-header"><div className="brand"><span className="brand-mark" aria-hidden="true">✓</span><span>Sistema de Gestión y Seguimiento de Incidentes y Accidentes</span></div></header>;
 }
-
 export default Navbar;
