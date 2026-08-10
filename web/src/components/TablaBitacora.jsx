@@ -8,7 +8,7 @@ function TablaBitacora({
 
     return (
 
-        <table
+        <div className="card table-card"><table
 
             border="1"
 
@@ -81,6 +81,7 @@ function TablaBitacora({
                             <td>
 
                                 <button
+                                    className="button button-primary button-small"
 
                                     onClick={() => onVer(registro)}
 
@@ -100,7 +101,7 @@ function TablaBitacora({
 
             </tbody>
 
-        </table>
+        </table></div>
 
     );
 

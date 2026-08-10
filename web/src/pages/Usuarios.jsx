@@ -50,6 +50,7 @@ function Usuarios() {
             <h1>Usuarios</h1>
 
            <button
+                className="button button-primary"
                 onClick={() => {
 
                     setUsuarioSeleccionado(null);

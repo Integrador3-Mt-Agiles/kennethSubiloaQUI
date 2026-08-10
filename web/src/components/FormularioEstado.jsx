@@ -112,7 +112,7 @@ function FormularioEstado({
 
             <br />
 
-            <button type="submit">
+            <button className="button button-primary" type="submit">
 
                 Actualizar Estado
 

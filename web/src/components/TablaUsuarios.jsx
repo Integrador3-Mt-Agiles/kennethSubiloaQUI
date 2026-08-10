@@ -55,19 +55,21 @@ function TablaUsuarios({
 
                             <td>
 
-                                <button
-                                    onClick={() => onEditar(usuario)}
-                                >
-                                    Editar
-                                </button>
+                                <div className="action-group">
+                                    <button
+                                        className="button button-secondary button-small"
+                                        onClick={() => onEditar(usuario)}
+                                    >
+                                        Editar
+                                    </button>
 
-                                {" "}
-
-                                <button
-                                    onClick={() => onEliminar(usuario)}
-                                >
-                                    Eliminar
-                                </button>
+                                    <button
+                                        className="button button-danger button-small"
+                                        onClick={() => onEliminar(usuario)}
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
 
                             </td>
 

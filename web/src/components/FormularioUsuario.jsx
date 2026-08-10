@@ -183,7 +183,7 @@ function FormularioUsuario({
 
             <br />
 
-            <button type="submit">
+            <button className="button button-primary" type="submit">
 
                 {
 

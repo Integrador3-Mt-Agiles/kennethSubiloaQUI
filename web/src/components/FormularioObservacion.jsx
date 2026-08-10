@@ -90,7 +90,7 @@ function FormularioObservacion({
 
             <br />
 
-            <button type="submit">
+            <button className="button button-primary" type="submit">
 
                 Guardar observación
 
