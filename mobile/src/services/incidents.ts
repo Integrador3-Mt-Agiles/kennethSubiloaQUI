@@ -4,6 +4,8 @@ import { Incident, Observation } from '../types';
 export const getIncidents = async (role: string, userId: string) => (await api.get<Incident[]>(role === 'Reportante' ? `/incidentes/reportante/${userId}` : '/incidentes')).data;
 export const getIncident = async (id: string) => (await api.get<Incident>(`/incidentes/${id}`)).data;
 export const createIncident = async (data: Omit<Incident, 'id' | 'estado' | 'reportanteId'>) => (await api.post('/incidentes', data)).data;
+export const updateIncident = async (id: string, data: Partial<Pick<Incident, 'titulo' | 'descripcion' | 'tipo' | 'ubicacion' | 'fechaIncidente' | 'reportanteId'>>) => (await api.put(`/incidentes/${id}`, data)).data;
+export const deleteIncident = async (id: string) => (await api.delete(`/incidentes/${id}`)).data;
 export const getObservations = async (id: string) => (await api.get<Observation[]>(`/incidentes/${id}/observaciones`)).data;
 export const addObservation = async (id: string, comentario: string) => (await api.post(`/incidentes/${id}/observaciones`, { comentario })).data;
 export const changeStatus = async (id: string, estado: string) => (await api.patch(`/incidentes/${id}/estado`, { estado })).data;
